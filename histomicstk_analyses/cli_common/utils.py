@@ -169,7 +169,17 @@ def create_tile_nuclei_boundary_annotations(im_nuclei_seg_mask, tile_info):
     return nuclei_annot_list
 
 
-def create_tile_nuclei_annotations(im_nuclei_seg_mask, tile_info, format):
+def create_tile_nuclei_annotations(
+        im_nuclei_seg_mask, tile_info=None, format='boundary'):
+
+    tile_info = tile_info or {
+        'gx': 0,
+        'gy': 0,
+        'gwidth': 1,
+        'gheight': 1,
+        'height': im_nuclei_seg_mask.shape[0],
+        'width': im_nuclei_seg_mask.shape[1]
+    }
 
     if format == 'bbox':
 

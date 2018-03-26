@@ -19,21 +19,13 @@ logging.basicConfig(level=logging.CRITICAL)
 
 from ..cli_common import utils as cli_utils  # noqa
 
+xml_file = os.path.join(os.path.dirname(__file__), 'NucleiDetection.xml')
+default_args = CLIArgumentParser(xml_file).parse_args(['a', 'b'])
 
-def detect_tile_nuclei(slide_path, tile_position, args, it_kwargs,
-                       src_mu_lab=None, src_sigma_lab=None):
 
-    # get slide tile source
-    ts = large_image.getTileSource(slide_path)
-
-    # get requested tile
-    tile_info = ts.getSingleTile(
-        tile_position=tile_position,
-        format=large_image.tilesource.TILE_FORMAT_NUMPY,
-        **it_kwargs)
-
-    # get tile image
-    im_tile = tile_info['tile'][:, :, :3]
+def detect_nuclei(im_tile, tile_info=None, args=None,
+                  src_mu_lab=None, src_sigma_lab=None):
+    args = args or default_args
 
     # perform color normalization
     im_nmzd = htk_cnorm.reinhard(im_tile,
@@ -54,13 +46,33 @@ def detect_tile_nuclei(slide_path, tile_position, args, it_kwargs,
 
     # generate nuclei annotations
     nuclei_annot_list = cli_utils.create_tile_nuclei_annotations(
-        im_nuclei_seg_mask, tile_info, args.nuclei_annotation_format)
+        im_nuclei_seg_mask, tile_info=tile_info,
+        format=args.nuclei_annotation_format)
 
     return nuclei_annot_list
 
 
+def detect_tile_nuclei(slide_path, tile_position, args, it_kwargs,
+                       src_mu_lab=None, src_sigma_lab=None):
+
+    # get slide tile source
+    ts = large_image.getTileSource(slide_path)
+
+    # get requested tile
+    tile_info = ts.getSingleTile(
+        tile_position=tile_position,
+        format=large_image.tilesource.TILE_FORMAT_NUMPY,
+        **it_kwargs)
+
+    # get tile image
+    im_tile = tile_info['tile'][:, :, :3]
+    return detect_nuclei(im_tile, tile_info, args,
+                         src_mu_lab, src_sigma_lab)
+
+
 def main(args):
 
+    args = CLIArgumentParser(xml_file).parse_args(args)
     total_start_time = time.time()
 
     print('\n>> CLI Parameters ...\n')
@@ -265,4 +277,5 @@ def main(args):
 
 if __name__ == "__main__":
 
-    main(CLIArgumentParser().parse_args())
+    import sys
+    main(sys.argv[1:])
