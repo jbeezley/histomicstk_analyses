@@ -5,5 +5,6 @@ setup(
     description='Standalone package for histomicstk analyses',
     author='Kitware, Inc.',
     author_email='kitware@kitware.com',
-    packages=['histomicstk_analyses']
+    packages=['histomicstk_analyses'],
+    install_requires=['large_image', 'histomicstk', 'ctk_cli']
 )

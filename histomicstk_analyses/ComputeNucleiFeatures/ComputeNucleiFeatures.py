@@ -1,5 +1,4 @@
 import os
-import sys
 import json
 import time
 
@@ -19,8 +18,7 @@ from ctk_cli import CLIArgumentParser
 import logging
 logging.basicConfig(level=logging.CRITICAL)
 
-sys.path.append(os.path.normpath(os.path.join(os.path.dirname(__file__), '..')))
-from cli_common import utils as cli_utils  # noqa
+from ..cli_common import utils as cli_utils  # noqa
 
 
 def compute_tile_nuclei_features(slide_path, tile_position, args, it_kwargs,
@@ -96,8 +94,10 @@ def check_args(args):
     if len(args.analysis_roi) != 4:
         raise ValueError('Analysis ROI must be a vector of 4 elements.')
 
-    if os.path.splitext(args.outputNucleiFeatureFile)[1] not in ['.csv', '.h5']:
-        raise ValueError('Extension of output feature file must be .csv or .h5')
+    if os.path.splitext(
+            args.outputNucleiFeatureFile)[1] not in ['.csv', '.h5']:
+        raise ValueError(
+            'Extension of output feature file must be .csv or .h5')
 
 
 def main(args):
@@ -309,7 +309,8 @@ def main(args):
 
     else:
 
-        raise ValueError('Extension of output feature file must be .csv or .h5')
+        raise ValueError(
+            'Extension of output feature file must be .csv or .h5')
 
     total_time_taken = time.time() - total_start_time
 

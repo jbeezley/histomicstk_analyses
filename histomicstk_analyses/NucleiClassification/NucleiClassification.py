@@ -1,5 +1,4 @@
 import os
-import sys
 import json
 import colorsys
 
@@ -13,8 +12,7 @@ from ctk_cli import CLIArgumentParser
 import logging
 logging.basicConfig(level=logging.CRITICAL)
 
-sys.path.append(os.path.normpath(os.path.join(os.path.dirname(__file__), '..')))
-from cli_common import utils as cli_utils  # noqa
+from ..cli_common import utils as cli_utils  # noqa
 
 
 def gen_distinct_rgb_colors(n, seed=None):
@@ -67,7 +65,8 @@ def read_feature_file(args):
         ddf = dd.read_hdf(args.inputNucleiFeatureFile, 'Features')
 
     else:
-        raise ValueError('Extension of output feature file must be .csv or .h5')
+        raise ValueError(
+            'Extension of output feature file must be .csv or .h5')
 
     return ddf
 
@@ -85,7 +84,7 @@ def main(args):
 
     print('\n>> CLI Parameters ...\n')
 
-    print args
+    print(args)
 
     #
     # Initiate Dask client
@@ -94,7 +93,7 @@ def main(args):
 
     c = cli_utils.create_dask_client(args)
 
-    print c
+    print(c)
 
     #
     # read model file
