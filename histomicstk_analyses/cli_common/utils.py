@@ -113,10 +113,10 @@ def create_tile_nuclei_bbox_annotations(im_nuclei_seg_mask, tile_info):
         height = nuclei_obj_props[i].bbox[2] - nuclei_obj_props[i].bbox[0] + 1
 
         # convert to base pixel coords
-        cx = np.round(gx + cx * wfrac, 2)
-        cy = np.round(gy + cy * hfrac, 2)
-        width = np.round(width * wfrac, 2)
-        height = np.round(height * hfrac, 2)
+        cx = gx + cx * wfrac
+        cy = gy + cy * hfrac
+        width = width * wfrac
+        height = height * hfrac
 
         # create annotation json
         cur_bbox = {
@@ -152,8 +152,8 @@ def create_tile_nuclei_boundary_annotations(im_nuclei_seg_mask, tile_info):
         num_points = len(bx[i])
 
         cur_points = np.zeros((num_points, 3))
-        cur_points[:, 0] = np.round(gx + bx[i] * wfrac, 2)
-        cur_points[:, 1] = np.round(gy + by[i] * hfrac, 2)
+        cur_points[:, 0] = gx + bx[i] * wfrac
+        cur_points[:, 1] = gy + by[i] * hfrac
 
         # create annotation json
         cur_annot = {
