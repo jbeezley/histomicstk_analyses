@@ -2,7 +2,7 @@ def convert_annotation(annotation, region):
     if annotation.get('type') != 'polyline':
         raise Exception('Unsupport annotation type')
 
-    llx, lly, urx, ury = region.bounds
+    llx, ury, urx, lly = region.bounds
     w = urx - llx
     h = ury - lly
     coordinates = [
